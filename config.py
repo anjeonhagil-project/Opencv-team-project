@@ -8,6 +8,9 @@ YUNET_MODEL_PATH = (
     BASE_DIR / "models" / "face_detection_yunet_2026may.onnx"
 )
 
+FACE_CLASSIFIER_MODEL_PATH = BASE_DIR / "models" / "face_classifier.pth"
+CLASS_NAMES_PATH = BASE_DIR / "models" / "class_names.json"
+
 DATASET_DIR = BASE_DIR / "dataset"
 
 # 웹캠

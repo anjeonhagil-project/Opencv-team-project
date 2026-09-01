@@ -8,6 +8,7 @@ from config import (
 
 from modules.face_detector import FaceDetector
 from modules.face_capture import FaceCapture
+from modules.face_recognition import RealTimeFaceRecognition
 
 
 def main():
@@ -20,6 +21,7 @@ def main():
         print("==============================")
         print("1. 얼굴 검출 테스트")
         print("2. 얼굴 등록")
+        print("4. 실시간 얼굴 인식")
         print("q. 종료")
         print("==============================")
 
@@ -112,6 +114,18 @@ def main():
             face_capture = FaceCapture()
 
             face_capture.capture(name)
+
+        # =========================
+        # 4. 실시간 얼굴 인식
+        # =========================
+
+        elif choice == "4":
+
+            try:
+                face_recognition = RealTimeFaceRecognition()
+                face_recognition.run()
+            except (FileNotFoundError, RuntimeError, ValueError) as error:
+                print(f"실시간 얼굴 인식을 실행할 수 없습니다: {error}")
 
         # =========================
         # 종료
