@@ -5,3 +5,6 @@ __pycache__/
 *.py[cod]
 
 .env
+dataset/
+
+train_model.md
