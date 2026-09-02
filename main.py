@@ -1,14 +1,7 @@
-import cv2
-
-from config import (
-    CAMERA_INDEX,
-    FRAME_WIDTH,
-    FRAME_HEIGHT
-)
-
-from modules.face_detector import FaceDetector
 from modules.face_capture import FaceCapture
 from modules.face_recognition import RealTimeFaceRecognition
+from modules.filters import Filters
+from modules.ar_items import run_ar
 
 
 def main():
@@ -19,91 +12,44 @@ def main():
         print("==============================")
         print("     Smart Face Camera")
         print("==============================")
-        print("1. 얼굴 검출 테스트")
-        print("2. 얼굴 등록")
+        print("1. 필터 적용")
+        print("2. AR 아이템 적용")
+        print("3. 얼굴 등록")
         print("4. 실시간 얼굴 인식")
         print("q. 종료")
         print("==============================")
 
-        choice = input("선택: ")
+        choice = input("선택: ").strip()
 
         # =========================
-        # 1. 얼굴 검출
+        # 1. 필터 적용
         # =========================
 
         if choice == "1":
 
-            face_detector = FaceDetector()
+            try:
+                filters = Filters()
+                filters.run()
 
-            cap = cv2.VideoCapture(CAMERA_INDEX)
-
-            if not cap.isOpened():
-                print("웹캠을 열 수 없습니다.")
-                continue
-
-            cap.set(
-                cv2.CAP_PROP_FRAME_WIDTH,
-                FRAME_WIDTH
-            )
-
-            cap.set(
-                cv2.CAP_PROP_FRAME_HEIGHT,
-                FRAME_HEIGHT
-            )
-
-            while True:
-
-                ret, frame = cap.read()
-
-                if not ret:
-                    break
-
-                frame = cv2.flip(frame, 1)
-
-                faces = face_detector.detect(frame)
-
-                if faces is not None:
-
-                    for face in faces:
-
-                        x, y, w, h = face_detector.get_bbox(face)
-
-                        cv2.rectangle(
-                            frame,
-                            (x, y),
-                            (x + w, y + h),
-                            (0, 255, 0),
-                            2
-                        )
-
-                        landmarks = face_detector.get_landmarks(face)
-
-                        for px, py in landmarks:
-
-                            cv2.circle(
-                                frame,
-                                (px, py),
-                                4,
-                                (0, 0, 255),
-                                -1
-                            )
-
-                cv2.imshow(
-                    "YuNet Face Detection",
-                    frame
-                )
-
-                if cv2.waitKey(1) & 0xFF == ord("q"):
-                    break
-
-            cap.release()
-            cv2.destroyAllWindows()
+            except (FileNotFoundError, RuntimeError, ValueError) as error:
+                print(f"필터 적용을 할 수 없습니다: {error}")
 
         # =========================
-        # 2. 얼굴 등록
+        # 2. AR 아이템 적용
         # =========================
 
         elif choice == "2":
+            try:
+                run_ar(0)
+
+            except (FileNotFoundError, RuntimeError, ValueError) as error:
+                print(f"AR 아이템을 실행할 수 없습니다: {error}")
+                
+        # =========================
+        # 3. 얼굴 등록
+        # =========================
+
+        elif choice == "3":
 
             name = input("등록할 이름: ").strip()
 
@@ -111,9 +57,12 @@ def main():
                 print("이름을 입력해주세요.")
                 continue
 
-            face_capture = FaceCapture()
+            try:
+                face_capture = FaceCapture()
+                face_capture.capture(name)
 
-            face_capture.capture(name)
+            except (FileNotFoundError, RuntimeError, ValueError) as error:
+                print(f"얼굴 등록을 할 수 없습니다: {error}")
 
         # =========================
         # 4. 실시간 얼굴 인식
@@ -124,6 +73,7 @@ def main():
             try:
                 face_recognition = RealTimeFaceRecognition()
                 face_recognition.run()
+
             except (FileNotFoundError, RuntimeError, ValueError) as error:
                 print(f"실시간 얼굴 인식을 실행할 수 없습니다: {error}")
 
