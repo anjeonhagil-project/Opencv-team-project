@@ -13,6 +13,10 @@ CLASS_NAMES_PATH = BASE_DIR / "models" / "class_names.json"
 
 DATASET_DIR = BASE_DIR / "dataset"
 
+# 학습 결과와 TensorBoard 기록
+RESULTS_DIR = BASE_DIR / "results"
+RUNS_DIR = BASE_DIR / "runs"
+
 # 웹캠
 CAMERA_INDEX = 0
 
