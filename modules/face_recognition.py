@@ -47,6 +47,11 @@ class RealTimeFaceRecognition:
                 continue
 
             name, probability = self.classifier.predict(face_image)
+
+            # 정확도가 80% 이하면 unknown
+            if probability <= 0.8:
+                name = "Unknown"
+
             results.append({
                 "name": name,
                 "probability": probability,
