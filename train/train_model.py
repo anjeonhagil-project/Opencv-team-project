@@ -18,7 +18,8 @@ from torch import nn
 from torch.utils.data import DataLoader, Subset
 from torch.utils.tensorboard import SummaryWriter
 from torchvision import datasets, models, transforms
-from torchvision.models import MobileNet_V2_Weights
+# from torchvision.models import MobileNet_V2_Weights
+from torchvision.models import MobileNet_V3_Small_Weights
 
 
 
@@ -164,10 +165,11 @@ def create_dataloaders(device):
 
 # 4. MobileNetV2 전이학습 모델 준비
 def build_model(class_count, device):
-    weights = MobileNet_V2_Weights.DEFAULT
+    weights = MobileNet_V3_Small_Weights.DEFAULT
+
 
     try:
-        model = models.mobilenet_v2(weights=weights)
+        model = models.mobilenet_v3_small(weights=weights)
     except (OSError, RuntimeError) as error:
         raise RuntimeError(
             "MobileNetV2 사전 학습 가중치를 불러오지 못했습니다. "
@@ -177,8 +179,8 @@ def build_model(class_count, device):
     for parameter in model.parameters():
         parameter.requires_grad = False
 
-    input_features = model.classifier[1].in_features
-    model.classifier[1] = nn.Linear(input_features, class_count)
+    input_features = model.classifier[3].in_features
+    model.classifier[3] = nn.Linear(input_features, class_count)
     return model.to(device)
 
 
@@ -455,7 +457,7 @@ def run_training(result_dir, writer, logger):
     logger.info("학습 가능한 파라미터 수: %s", f"{trainable_parameters:,}")
 
     configuration = {
-        "architecture": "mobilenet_v2",
+        "architecture": "mobilenet_v3_small",
         "device": str(device),
         "class_names": class_names,
         "class_image_counts": {
@@ -543,7 +545,7 @@ def run_training(result_dir, writer, logger):
             epochs_without_improvement = 0
 
             torch.save({
-                "architecture": "mobilenet_v2",
+                "architecture": "mobilenet_v3_small",
                 "model_state_dict": model.state_dict(),
                 "class_to_idx": class_to_idx,
                 "class_names": class_names,
@@ -688,7 +690,7 @@ def run_training(result_dir, writer, logger):
 
     model_size_mb = MODEL_PATH.stat().st_size / (1024 * 1024)
     summary = {
-        "architecture": "mobilenet_v2",
+        "architecture": "mobilenet_v3_small",
         "completed_epochs": len(history),
         "early_stopped": early_stopped,
         "selection_rule": "minimum_validation_loss",
@@ -742,7 +744,7 @@ def run_training(result_dir, writer, logger):
 
 
 def main():
-    run_name = datetime.now().strftime("mobilenet_v2_%Y%m%d_%H%M%S")
+    run_name = datetime.now().strftime("mobilenet_v3_small_%Y%m%d_%H%M%S")
     result_dir = RESULTS_ROOT / run_name
     result_dir.mkdir(parents=True, exist_ok=True)
     logger = create_logger(result_dir / "training.log", run_name)

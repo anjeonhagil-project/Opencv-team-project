@@ -35,9 +35,9 @@ class FaceClassifier:
             device=self.device,
         ).view(1, 3, 1, 1)
 
-        self.model = models.mobilenet_v2(weights=None)
-        input_features = self.model.classifier[1].in_features
-        self.model.classifier[1] = nn.Linear(input_features, len(self.class_names))
+        self.model = models.mobilenet_v3_small(weights=None)
+        input_features = self.model.classifier[3].in_features
+        self.model.classifier[3] = nn.Linear(input_features, len(self.class_names))
         self.model.load_state_dict(checkpoint["model_state_dict"])
         self.model.to(self.device).eval()
 
