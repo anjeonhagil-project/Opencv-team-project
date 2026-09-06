@@ -18,9 +18,13 @@ class FaceDetector:
             )
 
         # YuNet 얼굴 검출기 생성
+        # 경로에 비ASCII 문자(한글 등)가 있으면 OpenCV가 파일 경로를 못 읽는
+        # 문제가 있어, 모델을 바이트로 직접 읽어 버퍼로 전달한다.
+        model_buffer = bytearray(YUNET_MODEL_PATH.read_bytes())
         self.detector = cv2.FaceDetectorYN.create(
-            str(YUNET_MODEL_PATH),
-            "",
+            "onnx",
+            model_buffer,
+            bytearray(),
             input_size,
             score_threshold,
             nms_threshold,
