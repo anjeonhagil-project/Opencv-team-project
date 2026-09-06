@@ -11,3 +11,5 @@ dataset/*/
 train_model.md
 
 runs/
+
+results/*/

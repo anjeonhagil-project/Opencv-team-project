@@ -1,0 +1,62 @@
+{
+  "dataset_directory": "C:\\Users\\gkoh\\.vscode\\KDT\\Opencv-team-project\\dataset",
+  "class_count": 6,
+  "total_images": 1500,
+  "valid_images": 1500,
+  "invalid_images": 0,
+  "classes": {
+    "dawon": {
+      "total": 200,
+      "valid": 200,
+      "invalid": 0,
+      "image_sizes": {
+        "224x224": 200
+      }
+    },
+    "jinseo": {
+      "total": 300,
+      "valid": 300,
+      "invalid": 0,
+      "image_sizes": {
+        "224x224": 300
+      }
+    },
+    "seojin": {
+      "total": 300,
+      "valid": 300,
+      "invalid": 0,
+      "image_sizes": {
+        "224x224": 300
+      }
+    },
+    "sungwoo": {
+      "total": 200,
+      "valid": 200,
+      "invalid": 0,
+      "image_sizes": {
+        "224x224": 200
+      }
+    },
+    "sungwook": {
+      "total": 300,
+      "valid": 300,
+      "invalid": 0,
+      "image_sizes": {
+        "224x224": 300
+      }
+    },
+    "suyeon": {
+      "total": 200,
+      "valid": 200,
+      "invalid": 0,
+      "image_sizes": {
+        "224x224": 200
+      }
+    }
+  },
+  "invalid_files": [],
+  "warnings": [
+    "사람별 이미지 수 차이가 1.5배 이상입니다. 클래스 불균형을 확인하세요."
+  ],
+  "class_imbalance_ratio": 1.5
+}
