@@ -59,7 +59,8 @@ class RealTimeFaceRecognition:
             })
 
             x1, y1, x2, y2 = bounds
-            cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            color = (0, 0, 255) if name == "Unknown" else (0, 255, 0)
+            cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
             label_y = max(25, y1 - 10)
             cv2.putText(
                 frame,
@@ -67,7 +68,7 @@ class RealTimeFaceRecognition:
                 (x1, label_y),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 0.7,
-                (0, 255, 0),
+                color,
                 2,
                 cv2.LINE_AA,
             )
